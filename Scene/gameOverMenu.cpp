@@ -27,15 +27,15 @@ void GameOverMenu::render() const{
 void GameOverMenu::update() {
     if ((IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W)) && m_selected > MenuOption::Play) {
         m_selected = static_cast<MenuOption>(static_cast<int>(m_selected) - 1);
-        PlaySound(MENU_SELECT_SOUND_);
+        Sounds::MenuNavigate.play();
     }
     if ((IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S)) && m_selected < MenuOption::Main) {
         m_selected = static_cast<MenuOption>(static_cast<int>(m_selected) + 1);
-        PlaySound(MENU_SELECT_SOUND_);
+        Sounds::MenuNavigate.play();
     }
 
     if (IsKeyPressed(KEY_ENTER)) {
-        PlaySound(MENU_CONFIRM_SOUND_);
+        Sounds::MenuSelect.play();
         switch (m_selected) {
             case MenuOption::Play:
                 m_game.play();

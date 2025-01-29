@@ -5,14 +5,8 @@ Player::Player(WindowSettings *window) :
     Entity(Vector2{window->Width, window->Height} / 2, {0}, 0, 0),
     m_current_time(GetTime()),
     m_next_bullet_time(GetTime() + BULLET_INTERVAL),
-    m_next_enemy_time(GetTime() + ENEMY_INTERVAL),
-    m_thrust_sound(LoadSound("../Audio/thrust.wav")),
-    m_shoot_sound(LoadSound("../Audio/shoot.wav")),
-    m_asteroid_sound(LoadSound("../Audio/asteroid.wav")),
-    m_explode_sound(LoadSound("../Audio/explode.wav")) {
+    m_next_enemy_time(GetTime() + ENEMY_INTERVAL) {
     m_window = window;
-
-    SetSoundVolume(m_thrust_sound, 0.8);
 }
 
 void Player::handleBullets() {
@@ -54,14 +48,6 @@ void Player::handleEnemies() {
     }
 }
 
-void Player::handleSound(const Sound &sound, bool pause) {
-    if (!IsSoundPlaying(sound) and !pause) {
-        PlaySound(sound);
-    } else if (pause) {
-        StopSound(sound);
-    }
-}
-
 template<size_t SIZE>
 void Player::drawLines(std::array<Vector2, SIZE> array) const {
     for (size_t i=0; i < array.size()-1; i++) {
@@ -82,7 +68,7 @@ void Player::checkCollisions() {
         for (size_t j=0; j < m_bullet_list.size(); j++) {
             Bullet *bullet = &m_bullet_list[j];
             if (CheckCollisionPointCircle(bullet->position, enemy->position, enemy->size)) {
-                PlaySound(m_asteroid_sound);
+                Sounds::Asteroid.play();
                 m_enemy_list.erase(m_enemy_list.begin() + i);
                 m_bullet_list.erase(m_bullet_list.begin() + j);
                 score++;
@@ -95,7 +81,7 @@ void Player::checkCollisions() {
                 position.y + Vector2Rotate(SHIP_LINES[k], m_angle - 1.5f).y * SCALE
             };
             if (CheckCollisionPointCircle(point, enemy->position, enemy->size)) {
-                PlaySound(m_explode_sound);
+                Sounds::Explode.play();
                 game_over = true;
             }
         }
@@ -110,11 +96,11 @@ void Player::checkInput() {
     if (direction) {
         m_direction = Vector2{cosf(m_angle), sinf(m_angle)} * direction;
         m_speed += ACELERATION;
-        m_thrust_on = true;
-        handleSound(m_thrust_sound, false);
+        m_thrust = true;
+        Sounds::Thrust.play();
     } else {
-        m_thrust_on = false;
-        handleSound(m_thrust_sound, true);
+        m_thrust = false;
+        Sounds::Thrust.stop();
     }
     
     if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))
@@ -124,7 +110,7 @@ void Player::checkInput() {
     
 
     if (IsKeyPressed(KEY_SPACE) && m_current_time > m_next_bullet_time) {
-        PlaySound(m_shoot_sound);
+        Sounds::Shoot.play();
         m_bullet_list.push_back(
             Bullet(
                 {
@@ -150,7 +136,7 @@ void Player::movement() {
 void Player::render() const {
     drawLines(SHIP_LINES);
 
-    if (m_thrust_on) {
+    if (m_thrust) {
         drawLines(THRUST_LINES);
     }
 

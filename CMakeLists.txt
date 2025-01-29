@@ -1,12 +1,12 @@
-cmake_minimum_required(VERSION 3.11)
-project(Asteroids_Return)
+cmake_minimum_required(VERSION 3.20)
+project(TineSpace)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXE_LINKER_FLAGS "-static")
 set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static")
 
-if (${PLATFORM} STREQUAL "Desktop")
+if ("${PLATFORM}" STREQUAL "Desktop")
     set(CMAKE_CXX_FLAGS_RELEASE "-O3 -s -mwindows")
 endif()
 
@@ -17,23 +17,24 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(RAYLIB_VERSION 5.5)
 find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
 if (NOT raylib_FOUND) # If there's none, fetch and build raylib
-  include(FetchContent)
-  FetchContent_Declare(
-    raylib
-    DOWNLOAD_EXTRACT_TIMESTAMP OFF
-    URL https://github.com/raysan5/raylib/archive/refs/tags/${RAYLIB_VERSION}.tar.gz
-  )
-  FetchContent_GetProperties(raylib)
-  if (NOT raylib_POPULATED) # Have we downloaded raylib yet?
-    set(FETCHCONTENT_QUIET NO)
-    FetchContent_MakeAvailable(raylib)
-    set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
-  endif()
+    include(FetchContent)
+    FetchContent_Declare(
+        raylib
+        DOWNLOAD_EXTRACT_TIMESTAMP OFF
+        URL https://github.com/raysan5/raylib/archive/refs/tags/${RAYLIB_VERSION}.tar.gz
+    )
+    FetchContent_GetProperties(raylib)
+    if (NOT raylib_POPULATED) # Have we downloaded raylib yet?
+        set(FETCHCONTENT_QUIET NO)
+        FetchContent_MakeAvailable(raylib)
+        set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE) # don't build the supplied examples
+    endif()
 endif()
 
 # Our Project
 add_executable(${PROJECT_NAME} main.cpp 
-    game.cpp 
+    game.cpp
+    Sound/soundManager.cpp
     Scene/mainMenu.cpp
     Scene/pauseMenu.cpp
     Scene/helpMenu.cpp

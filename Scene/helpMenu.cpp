@@ -33,7 +33,7 @@ void HelpMenu::render() const{
 
 void HelpMenu::update() {
     if (IsKeyPressed(KEY_ENTER)) {
-        PlaySound(MENU_CONFIRM_SOUND_);
+        Sounds::MenuSelect.play();
         if (m_sub_menu) {
             m_game.setScene<PauseMenu>();
         } else {

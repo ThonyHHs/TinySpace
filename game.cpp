@@ -4,7 +4,6 @@
 
 Game::Game() {
     InitWindow(m_window.Width, m_window.Height, m_window.Title);
-    InitAudioDevice();
     
     SetWindowState(FLAG_WINDOW_UNDECORATED);
     SetTargetFPS(m_window.Fps);

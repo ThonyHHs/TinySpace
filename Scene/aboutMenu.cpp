@@ -38,7 +38,7 @@ void AboutMenu::render() const {
 
 void AboutMenu::update() {
     if (IsKeyPressed(KEY_ENTER)) {
-        PlaySound(MENU_CONFIRM_SOUND_);
+        Sounds::MenuSelect.play();
         m_game.setScene<MainMenu>();
     }
 }

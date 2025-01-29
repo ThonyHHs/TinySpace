@@ -31,12 +31,7 @@ class Player : public Entity {
             {-0.2f, -0.2f}
         }};
 
-        Sound m_thrust_sound;
-        Sound m_shoot_sound;
-        Sound m_asteroid_sound;
-        Sound m_explode_sound;
-
-        bool m_thrust_on = false;
+        bool m_thrust = false;
 
         float m_current_time;
         float m_next_bullet_time;
@@ -48,7 +43,6 @@ class Player : public Entity {
     private:
         void handleBullets();
         void handleEnemies();
-        void handleSound(const Sound &sound, bool pause);
         template<size_t SIZE>
         void drawLines(std::array<Vector2, SIZE> array) const;
 

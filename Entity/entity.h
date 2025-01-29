@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../config.h"
+#include "../Sound/soundManager.h"
 
 class Entity {
     protected:
